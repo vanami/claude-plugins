@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "isms": {
+      "type": "http",
+      "url": "https://isms.vanami.com/mcp",
+      "oauth": {
+        "clientId": "isms",
+        "scopes": "openid email offline_access"
+      }
+    }
+  }
+}

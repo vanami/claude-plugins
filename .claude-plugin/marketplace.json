@@ -1,0 +1,14 @@
+{
+  "name": "vanami",
+  "owner": { "name": "Vanami", "email": "anders@vanami.com" },
+  "metadata": { "description": "Vanami's plugins for Claude Code" },
+  "plugins": [
+    {
+      "name": "isms",
+      "source": "./isms",
+      "description": "Connect Claude Code to your ISMS at isms.vanami.com and answer the ISO 27001 auditor's questions from your code and infrastructure.",
+      "category": "security",
+      "homepage": "https://isms.vanami.com/installningar/ai"
+    }
+  ]
+}

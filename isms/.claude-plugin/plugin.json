@@ -1,0 +1,9 @@
+{
+  "name": "isms",
+  "version": "1.0.0",
+  "description": "Connect Claude Code to your ISMS at isms.vanami.com (Vanami) and answer the ISO 27001:2022 auditor's questions from your code and infrastructure, with evidence.",
+  "author": { "name": "Vanami", "url": "https://vanami.com" },
+  "homepage": "https://isms.vanami.com/installningar/ai",
+  "keywords": ["iso27001", "isms", "compliance", "audit", "soa", "mcp"],
+  "mcpServers": "./.mcp.json"
+}
