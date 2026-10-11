@@ -14,6 +14,13 @@
       "description": "Connect Claude Code to your ISMS at isms.vanami.com and answer the ISO 27001 auditor's questions from your code and infrastructure.",
       "category": "security",
       "homepage": "https://isms.vanami.com/installningar/ai"
+    },
+    {
+      "name": "saas-connect",
+      "source": "./plugins/saas-connect",
+      "description": "From a name and its plans to a running Vanami SaaS on the Vanami kit: template, manifest, Stripe, HQ24 business area, deployment and a check of the chain.",
+      "category": "development",
+      "homepage": "https://github.com/vanami/claude-plugins/tree/main/plugins/saas-connect"
     }
   ]
 }
