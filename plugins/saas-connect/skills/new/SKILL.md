@@ -70,8 +70,8 @@ Ask in one message, with a proposal for each, and wait for the answers:
    rm -rf node_modules .next tsconfig.tsbuildinfo
    git init -b main && npm install
    ```
-   In `package.json`, point `kit:sync` and `kit:check` at `../saas-kit` instead of `..`, then
-   run `npm run kit:sync`.
+   The kit's SDKs come from npm (`@vanami/accounts`, `@vanami/accounts-react`), and the
+   template's `.github/dependabot.yml` proposes their updates; keep both.
 2. Fill in `kit/product.yaml` from the brief (`references/manifest.md`), and mirror the plans
    and roles in `lib/product.ts`. Set the title in `app/layout.tsx` and the texts.
 3. Leave the example feature (`item`) for now. It proves the plan and permission checks
@@ -158,7 +158,8 @@ Report each check as passed or failed, with what was seen.
 ## 8. Update the README of the service
 
 Replace the template's README with the service's own: what it does, the plans, how to run it
-locally, the environment variables, and that `lib/kit*` is vendored (`npm run kit:sync`).
+locally, the environment variables, and that the kit's SDKs are npm dependencies that
+Dependabot updates.
 
 ## 9. Next: the service's own feature
 

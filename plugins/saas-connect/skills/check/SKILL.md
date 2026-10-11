@@ -1,6 +1,6 @@
 ---
 name: check
-description: Check that a Vanami kit service is wired up end to end — its manifest loaded by the kit, Stripe in step with the catalog, the HQ24 business area, the vendored SDK, the domain, sign-in and the kit's webhooks. Use when the user asks whether a service is set up right, after a deploy, or when sign-in, plans or billing misbehave.
+description: Check that a Vanami kit service is wired up end to end — its manifest loaded by the kit, Stripe in step with the catalog, the HQ24 business area, the kit's SDK, the domain, sign-in and the kit's webhooks. Use when the user asks whether a service is set up right, after a deploy, or when sign-in, plans or billing misbehave.
 ---
 
 # Check a service's chain
@@ -24,9 +24,11 @@ Run the checks, then report each as **ok**, **wrong** (with what was seen) or **
    (`payments.list_gateways`), the service's Stripe products are linked
    (`payments.list_gateway_product_links`) and no document waits in review for it
    (`payments.list_gateway_documents` with `status: review`).
-5. **SDK:** the service's vendored kit SDK matches saas-kit (`npm run kit:check`, or
-   `scripts/sync-kit-sdk.sh <saas-kit> --check`). Drift is wrong when a method the service
-   calls changed; otherwise report it as a resync to do.
+5. **SDK:** the service takes the kit's SDKs as dependencies (`@vanami/accounts` in
+   `package.json`, `github.com/vanami/accounts-sdk/go` in a Go backend's `go.mod`), with no
+   vendored copy left, and `.github/dependabot.yml` covers them. Compare the version in the
+   lockfile with the latest release (`npm view @vanami/accounts version`); behind it, point to
+   the open Dependabot PR or report an update to do.
 6. **Domain:** `https://<domain>` answers over TLS; `/auth/kit/start` redirects to
    `https://accounts.vanami.com/authorize` with `client_id=<product>`.
 7. **Webhooks:** a POST without a valid signature to the manifest's `webhooks` URL answers
