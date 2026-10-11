@@ -23,4 +23,12 @@ The assistant works with your role's permissions, asks before every write, never
 documents and never deletes anything. Changes to controls are logged as made by the AI
 assistant. It only reads your infrastructure, and asks before its first cloud CLI call.
 
-To switch company, run `/mcp`, choose `isms`, clear the authentication and sign in again.
+To switch company, sign out and in again, then pick the other company:
+
+```sh
+claude mcp logout plugin:isms:isms
+claude mcp login plugin:isms:isms
+```
+
+Step-by-step guide: Inställningar → AI-assistent in the ISMS
+([isms.vanami.com/installningar/ai](https://isms.vanami.com/installningar/ai)).
