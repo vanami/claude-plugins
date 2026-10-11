@@ -75,7 +75,7 @@ Ask in one message, with a proposal for each, and wait for the answers:
 2. Fill in `kit/product.yaml` from the brief (`references/manifest.md`), and mirror the plans
    and roles in `lib/product.ts`. Set the title in `app/layout.tsx` and the texts.
 3. Leave the example feature (`item`) for now. It proves the plan and permission checks
-   until the service's own feature replaces it in step 9.
+   until the service's own feature replaces it in step 10.
 4. Check: `npm run typecheck && npm test`.
 5. With a yes, create the private repo and push:
    `gh repo create hallsten/<product> --private --source . --push`.
@@ -155,12 +155,19 @@ Run `/saas-connect:check <product>`, or the same checks by hand:
 
 Report each check as passed or failed, with what was seen.
 
-## 8. Update the README of the service
+## 8. Add it to the kit's service check
+
+The kit checks every service against its SDKs on each SDK change and daily (saas-kit README,
+*Services*). In saas-kit, add a `case` for the service to `scripts/check-service.sh` and a
+row to the matrix in `.github/workflows/services.yml`, run the script once locally, and open
+the PR with a yes. Tell the user to add the new repo to the `SERVICES_READ_TOKEN` token.
+
+## 9. Update the README of the service
 
 Replace the template's README with the service's own: what it does, the plans, how to run it
 locally, the environment variables, and that `lib/kit*` is vendored (`npm run kit:sync`).
 
-## 9. Next: the service's own feature
+## 10. Next: the service's own feature
 
 Offer to replace the example feature (`item`) with the first real one, keeping the two checks
 on every write: the plan (`require` → 402) and the permission (`requirePermission` → 403).
