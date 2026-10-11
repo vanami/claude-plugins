@@ -1,34 +1,23 @@
-# isms — Claude Code plugin for isms.vanami.com
+# Vanami plugins for Claude Code
 
-Connects Claude Code to your ISMS at [isms.vanami.com](https://isms.vanami.com) and answers
-the ISO/IEC 27001:2022 auditor's questions from your code, CI and infrastructure, with
-evidence the auditor can verify.
+A [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugins) with Vanami's plugins.
+
+Add the marketplace once:
 
 ```sh
 claude plugin marketplace add vanami/claude-plugins
-claude plugin install isms@vanami
 ```
 
-Start `claude` in your repository and run `/isms:audit`. The first time, your browser opens:
-sign in with Vanami ID and pick the company.
+Then install the plugins you want:
 
-| Skill | What it does |
-| --- | --- |
-| `/isms:audit` | Goes through the open controls, collects evidence, proposes answers and writes the approved ones |
-| `/isms:control A.8.13` | One control or clause, or an auditor's question |
-| `/isms:status` | Audit dates, progress and what is left |
-| `/isms:suppliers` | Supplier and asset registers from the code |
+| Plugin | Install | What it does |
+| --- | --- | --- |
+| [isms](plugins/isms) | `claude plugin install isms@vanami` | Answers the ISO 27001 auditor's questions in your ISMS at [isms.vanami.com](https://isms.vanami.com) from your code and infrastructure |
 
-The assistant works with your role's permissions, asks before every write, never approves
-documents and never deletes anything. Changes to controls are logged as made by the AI
-assistant. It only reads your infrastructure, and asks before its first cloud CLI call.
+Update with `claude plugin marketplace update vanami`.
 
-To switch company, sign out and in again, then pick the other company:
+## Adding a plugin
 
-```sh
-claude mcp logout plugin:isms:isms
-claude mcp login plugin:isms:isms
-```
-
-Step-by-step guide: Inställningar → AI-assistent in the ISMS
-([isms.vanami.com/installningar/ai](https://isms.vanami.com/installningar/ai)).
+1. Put it in `plugins/<name>/` with `.claude-plugin/plugin.json` (its `name` is `<name>`), and skills, agents and `.mcp.json` at the plugin's root.
+2. Add an entry to `.claude-plugin/marketplace.json` with `"source": "./plugins/<name>"`.
+3. Check with `claude plugin validate .` and `claude plugin validate plugins/<name>`, and add a row to the table above.
