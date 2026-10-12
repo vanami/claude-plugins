@@ -1,7 +1,7 @@
 {
   "name": "saas-connect",
-  "version": "1.0.1",
-  "description": "From a name and its plans to a running Vanami SaaS on the Vanami kit (accounts.vanami.com): the service from the kit's template, its manifest registered in the kit, Stripe products, HQ24 business area, deployment and a check of the whole chain.",
+  "version": "1.1.0",
+  "description": "From a name and its plans to a running Vanami SaaS on the Vanami kit (accounts.vanami.com): the service from the kit's template, its manifest saved in the kit, Stripe products, HQ24 business area, deployment and a check of the whole chain.",
   "author": { "name": "Vanami", "url": "https://vanami.com" },
   "homepage": "https://github.com/vanami/claude-plugins/tree/main/plugins/saas-connect",
   "keywords": ["saas", "vanami", "stripe", "oidc", "nextjs", "vercel", "hq24"]
