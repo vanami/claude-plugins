@@ -1,30 +1,37 @@
 ---
 name: plans
-description: Change an existing Vanami kit service's plans, prices, limits, roles or HQ24 business area — the manifest in saas-kit and the service's copy, Stripe through `accounts sync`, and the HQ24 products. Use when the user wants to change what a service costs, what a plan includes, or which business area its revenue is booked on.
+description: Change an existing Vanami kit service's plans, prices, limits, roles or HQ24 business area — the manifest in the kit's database and the service's copy, Stripe through `accounts sync`, and the HQ24 products. Use when the user wants to change what a service costs, what a plan includes, or which business area its revenue is booked on.
 ---
 
 # Change a service's plans
 
-A service's manifest lives in `saas-kit/products/<product>.yaml`; the service keeps a copy
-(`kit/product.yaml`, or wherever its README says) and mirrors plans and roles in its UI
-(`lib/product.ts` in the template). All three change together.
+The kit keeps each service's manifest in its database, versioned (saas-kit doc 07 G198). The
+service keeps its copy (`kit/product.yaml`, or wherever its README says) and mirrors plans
+and roles in its UI (`lib/product.ts` in the template). All three change together. The kit
+context is in `saas-kit/deploy/README.md`; `P` below stands for
+
+```sh
+P="kubectl --context <kit context> -n accounts exec -i deploy/accounts -- /accounts products"
+```
 
 Ask before every change outside the local repos, and never print a secret.
 
 ## 1. What changes
 
-Read the current manifest and show it as a short table: plans, prices, entitlements, roles,
-business area. Ask what should change, and propose. Then say what the change means:
+Read the kit's current version: `$P show <product>` (its first line names the version; `$P
+history <product>` lists the earlier ones). If the service's copy differs from it, say so
+first: the kit's is what runs. Show the manifest as a short table: plans, prices,
+entitlements, roles, business area. Ask what should change, and propose. Then say what the
+change means:
 
 - **A new price amount** creates a new Stripe price that takes over the lookup key, and
   deactivates the old one (Stripe prices cannot change). Existing subscribers stay on the old
   price; only new purchases and plan changes get the new one. Moving existing subscribers is a
   separate decision: say so and do not do it here.
-- **Never remove a plan that has subscribers.** A plan the catalog no longer knows grants the
-  free plan (saas-kit CLAUDE.md rule 7), while Stripe goes on charging for it. `accounts sync`
-  leaves its Stripe product and price as they are. Move the subscribers first (Stripe, or the
-  kit's billing page), or keep the plan. Removing one interval of a plan is safe: its
-  subscribers keep the plan.
+- **A plan an account holds cannot be removed**: the kit refuses (`in use`) while a live
+  subscription or a plan granted without Stripe (`accounts grant`) is on it. Move the
+  subscribers first (Stripe, or the kit's billing page) and revoke the grants, or keep the
+  plan. Removing one interval of a plan is safe: its subscribers keep the plan.
 - **A changed entitlement** takes effect for everyone on that plan within a token's
   lifetime (15 minutes). A lowered limit follows the manifest's `over_limit`.
 - **A changed business area** (`dimensions`) updates the Stripe products' `hq24_dim_*`
@@ -34,12 +41,21 @@ business area. Ask what should change, and propose. Then say what the change mea
 
 ## 2. The manifest
 
-1. On a branch in saas-kit, change `products/<product>.yaml`. Run
-   `go test ./internal/catalog/...` (`TestShippedManifestsLoad` loads it as the server does).
-2. Make the same change in the service's copy and in its UI's plan list, on a branch there.
-3. With a yes, open both PRs. Merge saas-kit first, then roll the kit out
-   (`saas-kit/deploy/README.md`: release, then `rollout restart deploy/accounts`) and check the
-   start-up log for `accounts listening` and no catalog error.
+1. On a branch in the service, change `kit/product.yaml` and the UI's plan list.
+2. Check it with every check the kit makes, saving nothing (`N` is the version `show` named):
+   ```sh
+   $P save <product> --expect N --check < kit/product.yaml
+   ```
+   Show the diff against `$P show <product>` and what the check said.
+3. With a yes, save it (the person's name in `--by`, for the kit's audit log). Every replica
+   serves it at once; no release:
+   ```sh
+   $P save <product> --expect N --by <who> --note "<what changed>" < kit/product.yaml
+   ```
+   `version conflict` means someone saved in between: show their version, and start over
+   from step 1.
+4. To undo a save, save the earlier version again: `$P show <product> --version N-1` into a
+   file, then `save` it with the new `--expect`.
 
 ## 3. Stripe
 
@@ -48,7 +64,7 @@ kubectl --context <kit context> -n accounts exec deploy/accounts -- /accounts sy
 ```
 
 Show the dry run. With a yes, run it without `--dry-run`, then the dry run again: no changes.
-Then merge the service's PR.
+Then, with a yes, open and merge the service's PR (its copy and its UI).
 
 ## 4. HQ24 (only when the business area changed)
 
@@ -60,5 +76,5 @@ Then merge the service's PR.
 
 ## 5. Report
 
-What changed where (PR links, Stripe prices created or archived, HQ24 products updated), and
+What changed where (the manifest's new version in the kit, PR links, Stripe prices created or archived, HQ24 products updated), and
 what was deliberately left alone (existing subscribers on old prices, booked invoices).

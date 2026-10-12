@@ -11,12 +11,13 @@ but change nothing without a yes. Never print a secret.
 Run the checks, then report each as **ok**, **wrong** (with what was seen) or **not checked**
 (with why), in one table, followed by what to do about each wrong one.
 
-1. **Manifest:** `saas-kit/products/<product>.yaml` exists on saas-kit's main branch, and
-   the service's copy says the same (diff plans, prices, roles, domain, webhooks).
-2. **Kit loaded it:** the kit's start-up log (`kubectl --context <kit context> -n accounts
-   logs deploy/accounts`, context from `saas-kit/deploy/README.md`) shows `accounts listening`
-   with the product count, and no catalog error, `missing: [...]` (Stripe key permissions) or
-   drift.
+1. **Manifest:** the kit has it (`/accounts products show <product>` in the kit's pod,
+   `kubectl --context <kit context> -n accounts exec deploy/accounts --`, context from
+   `saas-kit/deploy/README.md`), and the service's copy says the same (diff plans, prices,
+   roles, domain, webhooks). The kit's version is what runs.
+2. **Kit serves it:** the kit's log (`kubectl --context <kit context> -n accounts logs
+   deploy/accounts`) shows `accounts listening` and a later `catalog applied`, and no catalog
+   error, `missing: [...]` (Stripe key permissions) or drift.
 3. **Stripe:** `/accounts sync --dry-run` in the kit's pod reports only `*.ok` for this
    product.
 4. **HQ24:** with the HQ24 MCP, the manifest's `BUSINESS_AREA` value exists

@@ -1,6 +1,6 @@
 ---
 name: new
-description: Create a new Vanami SaaS service on the Vanami kit from a name and its plans — the repo from the kit's template, the product manifest registered in saas-kit, Stripe products and prices, the HQ24 business area, the database, deployment on Vercel and the domain. Use when the user wants to start, scaffold or launch a new SaaS, app or service on the kit.
+description: Create a new Vanami SaaS service on the Vanami kit from a name and its plans — the repo from the kit's template, the product manifest saved in the kit, Stripe products and prices, the HQ24 business area, the database, deployment on Vercel and the domain. Use when the user wants to start, scaffold or launch a new SaaS, app or service on the kit.
 ---
 
 # A new service on the Vanami kit
@@ -14,14 +14,16 @@ The source of truth is the user's local clone of saas-kit, not this skill. Read 
 step 2, and follow them where they are more specific or newer than this text:
 
 - `saas-kit/template/README.md`: the template and the steps for a new service
-- `saas-kit/products/example.yaml.sample`: every manifest field
+- `saas-kit/products/example.yaml.sample`: every manifest field (the kit keeps the manifests
+  themselves in its database, doc 07 G198)
 - `saas-kit/deploy/README.md`: the kit's cluster context and operations
 - `saas-kit/CLAUDE.md`: the kit's rules
 
 ## Rules
 
 - **Ask before every step that changes something outside the new repo:** creating a GitHub
-  repo, opening or merging a PR in saas-kit, `accounts sync` without `--dry-run`, creating
+  repo, saving the manifest in the kit (`accounts products save` without `--check`),
+  `accounts sync` without `--dry-run`, creating
   a Vercel project or env var, DNS, and HQ24. Show what will happen first.
 - **Secrets never pass through the conversation.** Pipe them from where they are made to
   where they go (step 6). Never print them, never commit them.
@@ -82,21 +84,24 @@ Ask in one message, with a proposal for each, and wait for the answers:
 
 ## 3. Register it in the kit
 
-1. In saas-kit, on a branch, copy the manifest to `products/<product>.yaml`. Keep the
-   header comment pointing at the service's repo.
-2. Validate it before the PR: `go test ./internal/catalog/...` in saas-kit.
-   `TestShippedManifestsLoad` loads every file in `products/`, as the server does at start;
-   a manifest that fails there would stop the kit from starting.
-3. With a yes, open the PR (title `products: <Name> (<product>)`), wait for green CI, and merge
-   when the user says so.
-4. Roll the kit out so it loads the manifest (the release workflow pushes the image on
-   merge; wait for it):
+The kit keeps every manifest in its database (saas-kit doc 07 G198); there is no PR and no
+release. The kit context is in `saas-kit/deploy/README.md`.
+
+1. Check the manifest with every check the kit makes, saving nothing:
    ```sh
-   kubectl --context <kit context> -n accounts rollout restart deploy/accounts
-   kubectl --context <kit context> -n accounts rollout status deploy/accounts
+   kubectl --context <kit context> -n accounts exec -i deploy/accounts -- \
+     /accounts products save <product> --expect 0 --check < kit/product.yaml
    ```
-   The log line `accounts listening` shows `products: <n>`, one more than before. An error
-   naming the manifest means it did not load: fix it in a new PR.
+   An error names what is wrong (`invalid manifest`, a login host another product has);
+   fix `kit/product.yaml` and run it again. `version conflict` means the product exists
+   already: stop and ask.
+2. With a yes, save it (the person's name in `--by`, for the kit's audit log):
+   ```sh
+   kubectl --context <kit context> -n accounts exec -i deploy/accounts -- \
+     /accounts products save <product> --expect 0 --by <who> --note "new service" < kit/product.yaml
+   kubectl --context <kit context> -n accounts exec deploy/accounts -- /accounts products list
+   ```
+   Every replica serves it at once: the list shows `<product>` at version 1.
 
 ## 4. Stripe
 
