@@ -21,6 +21,13 @@
       "description": "From a name and its plans to a running Vanami SaaS on the Vanami kit: template, manifest, Stripe, HQ24 business area, deployment and a check of the chain.",
       "category": "development",
       "homepage": "https://github.com/vanami/claude-plugins/tree/main/plugins/saas-connect"
+    },
+    {
+      "name": "invoice",
+      "source": "./plugins/invoice",
+      "description": "Connect Claude Code to your Peppol portal at invoice.vanami.com: send e-invoices, remind customers of what is overdue, and pay suppliers with a payment file for the bank.",
+      "category": "productivity",
+      "homepage": "https://invoice.vanami.com"
     }
   ]
 }

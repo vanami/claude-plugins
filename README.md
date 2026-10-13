@@ -13,6 +13,7 @@ Then install the plugins you want:
 | Plugin | Install | What it does |
 | --- | --- | --- |
 | [isms](plugins/isms) | `claude plugin install isms@vanami` | Answers the ISO 27001 auditor's questions in your ISMS at [isms.vanami.com](https://isms.vanami.com) from your code and infrastructure |
+| [invoice](plugins/invoice) | `claude plugin install invoice@vanami` | Sends e-invoices over Peppol, reminds customers of what is overdue and pays suppliers with a payment file, in your portal at [invoice.vanami.com](https://invoice.vanami.com) |
 | [saas-connect](plugins/saas-connect) | `claude plugin install saas-connect@vanami` | From a name and its plans to a running Vanami SaaS on the Vanami kit (for Vanami's own services) |
 
 Update with `claude plugin marketplace update vanami`.
