@@ -1,6 +1,6 @@
 ---
 name: payments
-description: Pay suppliers through the bank from the Peppol portal (invoice.vanami.com) — list received invoices waiting to be paid, write an ISO 20022 payment file (pain.001) of those the user chooses to upload to the bank, and mark paid from the bank's statement (camt.054/053). Use when the user wants a payment run, to pay supplier invoices, or to reconcile what the bank paid.
+description: Pay suppliers through the bank from Vanami Procure (invoice.vanami.com) — list received invoices waiting to be paid, write an ISO 20022 payment file (pain.001) of those the user chooses to upload to the bank, and mark paid from the bank's statement (camt.054/053). Use when the user wants a payment run, to pay supplier invoices, or to reconcile what the bank paid.
 ---
 
 # Payment run

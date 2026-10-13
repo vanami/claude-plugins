@@ -1,6 +1,6 @@
 # invoice — Claude Code plugin for invoice.vanami.com
 
-Connects Claude Code to your Peppol portal at [invoice.vanami.com](https://invoice.vanami.com):
+Connects Claude Code to Vanami Procure at [invoice.vanami.com](https://invoice.vanami.com):
 write and send e-invoices over Peppol, follow up what customers owe, and pay suppliers with a
 payment file for your bank.
 

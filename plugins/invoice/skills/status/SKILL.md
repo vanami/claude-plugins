@@ -1,9 +1,9 @@
 ---
 name: status
-description: Show where a company stands in the Peppol portal (invoice.vanami.com) — what customers owe and what is overdue, supplier invoices waiting to be paid, documents waiting to be approved, and drafts. Use when the user asks how things stand, what needs doing, or for an overview of invoicing.
+description: Show where a company stands in Vanami Procure (invoice.vanami.com) — what customers owe and what is overdue, supplier invoices waiting to be paid, documents waiting to be approved, and drafts. Use when the user asks how things stand, what needs doing, or for an overview of invoicing.
 ---
 
-# Peppol portal status
+# Vanami Procure status
 
 1. Call the `peppol` MCP server's `list_companies`. If the tools are missing or unauthorised, tell
    the user to run `/mcp`, choose `peppol` and sign in with their Vanami account. With more than
