@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "peppol": {
+      "type": "http",
+      "url": "https://invoice.vanami.com/mcp"
+    }
+  }
+}
