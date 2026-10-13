@@ -30,6 +30,13 @@
 them (`"*"` = all). `default_roles` gives the kit's roles (owner, admin, member) a role in the
 service until someone assigns another. All three or none.
 
+## Names
+
+Each plan and meter has a `name`, and `labels:` names the roles, permissions and
+entitlements: a map per language (`{ en: Editor, sv: Redigerare }`), `en` required, only for
+what the manifest declares. The service shows them from the kit's catalogue, so give them in
+every language the service is written in. Without one, the key is shown.
+
 ## The rest
 
 - `domain` and the `client` redirect URIs: the service's public origin. Checkout and the

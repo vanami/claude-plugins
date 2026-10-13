@@ -13,8 +13,11 @@ Run the checks, then report each as **ok**, **wrong** (with what was seen) or **
 
 1. **Manifest:** the kit has it (`/accounts products show <product>` in the kit's pod,
    `kubectl --context <kit context> -n accounts exec deploy/accounts --`, context from
-   `saas-kit/deploy/README.md`), and the service's copy says the same (diff plans, prices,
-   roles, domain, webhooks). The kit's version is what runs.
+   `saas-kit/deploy/README.md`), its catalogue answers
+   (`https://accounts.vanami.com/api/v1/products/<product>`, no sign-in), and the service
+   reads it rather than keeping a copy (no plan list or prices hard-coded in its code; the
+   template has `lib/catalogue.ts`). The service's start-up log has no
+   `does not declare` warning (a key its code checks that the manifest lacks).
 2. **Kit serves it:** the kit's log (`kubectl --context <kit context> -n accounts logs
    deploy/accounts`) shows `accounts listening` and a later `catalog applied`, and no catalog
    error, `missing: [...]` (Stripe key permissions) or drift.

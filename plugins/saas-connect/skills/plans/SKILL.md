@@ -1,14 +1,17 @@
 ---
 name: plans
-description: Change an existing Vanami kit service's plans, prices, limits, roles or HQ24 business area — the manifest in the kit's database and the service's copy, Stripe through `accounts sync`, and the HQ24 products. Use when the user wants to change what a service costs, what a plan includes, or which business area its revenue is booked on.
+description: Change an existing Vanami kit service's plans, prices, limits, roles or HQ24 business area — the manifest in the kit's database (which the service reads from the kit's catalogue), Stripe through `accounts sync`, and the HQ24 products. Use when the user wants to change what a service costs, what a plan includes, or which business area its revenue is booked on.
 ---
 
 # Change a service's plans
 
-The kit keeps each service's manifest in its database, versioned (saas-kit doc 07 G198). The
-service keeps its copy (`kit/product.yaml`, or wherever its README says) and mirrors plans
-and roles in its UI (`lib/product.ts` in the template). All three change together. The kit
-context is in `saas-kit/deploy/README.md`; `P` below stands for
+The kit keeps each service's manifest in its database, versioned (saas-kit doc 07 G198), and
+serves it to the service as its catalogue: plans, prices, roles and their names, read at run
+time (`GET /api/v1/products/<product>`, doc 07 D-450). A change in the kit shows in the service
+within a minute, with no release. The service's code keeps only the permission and
+entitlement keys it checks (`lib/product.ts` in the template); a template service also keeps
+`kit/product.yaml` as its end-to-end run's manifest. The kit context is in
+`saas-kit/deploy/README.md`; `P` below stands for
 
 ```sh
 P="kubectl --context <kit context> -n accounts exec -i deploy/accounts -- /accounts products"
@@ -19,8 +22,7 @@ Ask before every change outside the local repos, and never print a secret.
 ## 1. What changes
 
 Read the kit's current version: `$P show <product>` (its first line names the version; `$P
-history <product>` lists the earlier ones). If the service's copy differs from it, say so
-first: the kit's is what runs. Show the manifest as a short table: plans, prices,
+history <product>` lists the earlier ones). The kit's is what runs. Show the manifest as a short table: plans, prices,
 entitlements, roles, business area. Ask what should change, and propose. Then say what the
 change means:
 
@@ -38,24 +40,35 @@ change means:
   metadata, but HQ24 reads it **only when it creates a product**. Existing HQ24 products keep
   their old value: change them in HQ24 too (step 4). Invoices already booked keep the old value.
 - **Plan keys** (`key:`) are stored on subscriptions: never rename one, add a new one.
+- **Names** come from the manifest: a plan's or meter's `name`, and `labels:` for roles,
+  permissions and entitlements, each a map per language with `en` required. Give a new plan
+  or role its names in every language the service shows.
+- **A new or renamed permission or entitlement key** must also be in the service's code
+  (`lib/product.ts`), and removing one the code checks breaks that check: the service warns at
+  start about keys the manifest lacks. Change the code in the same go.
 
 ## 2. The manifest
 
-1. On a branch in the service, change `kit/product.yaml` and the UI's plan list.
+1. Start from the kit's version: `$P show <product> | sed 1d > /tmp/<product>.yaml`, and
+   change that file.
 2. Check it with every check the kit makes, saving nothing (`N` is the version `show` named):
    ```sh
-   $P save <product> --expect N --check < kit/product.yaml
+   $P save <product> --expect N --check < /tmp/<product>.yaml
    ```
    Show the diff against `$P show <product>` and what the check said.
 3. With a yes, save it (the person's name in `--by`, for the kit's audit log). Every replica
    serves it at once; no release:
    ```sh
-   $P save <product> --expect N --by <who> --note "<what changed>" < kit/product.yaml
+   $P save <product> --expect N --by <who> --note "<what changed>" < /tmp/<product>.yaml
    ```
    `version conflict` means someone saved in between: show their version, and start over
    from step 1.
 4. To undo a save, save the earlier version again: `$P show <product> --version N-1` into a
    file, then `save` it with the new `--expect`.
+5. The service: the catalogue shows the change (`curl https://accounts.vanami.com/api/v1/products/<product>`).
+   Only when a key the code checks changed, or the e2e run should see the new manifest, does
+   the service need a PR: on a branch, update `lib/product.ts` and/or copy the saved version
+   into `kit/product.yaml`.
 
 ## 3. Stripe
 
@@ -64,7 +77,7 @@ kubectl --context <kit context> -n accounts exec deploy/accounts -- /accounts sy
 ```
 
 Show the dry run. With a yes, run it without `--dry-run`, then the dry run again: no changes.
-Then, with a yes, open and merge the service's PR (its copy and its UI).
+Then, if step 2.5 needed one, with a yes open and merge the service's PR.
 
 ## 4. HQ24 (only when the business area changed)
 
