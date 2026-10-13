@@ -1,6 +1,6 @@
 ---
 name: invoice
-description: Write an e-invoice or credit note in Vanami Procure (invoice.vanami.com) from a description, check it against the Peppol rules, and send it over Peppol once the user says so. Use when the user wants to invoice a customer, bill for work or goods, or credit an invoice.
+description: Write an e-invoice or credit note in Vanami Invoice (invoice.vanami.com) from a description, check it against the Peppol rules, and send it over Peppol once the user says so. Use when the user wants to invoice a customer, bill for work or goods, or credit an invoice.
 ---
 
 # Write and send an invoice
