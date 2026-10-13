@@ -1,6 +1,6 @@
 ---
 name: reminders
-description: Follow up overdue customer invoices in the Peppol portal (invoice.vanami.com) — list what is overdue, mark paid what the user says was paid, and mail payment reminders the user approves. Use when the user asks about overdue invoices, unpaid customers, dunning or sending reminders.
+description: Follow up overdue customer invoices in Vanami Procure (invoice.vanami.com) — list what is overdue, mark paid what the user says was paid, and mail payment reminders the user approves. Use when the user asks about overdue invoices, unpaid customers, dunning or sending reminders.
 ---
 
 # Remind customers of overdue invoices

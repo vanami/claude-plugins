@@ -1,7 +1,7 @@
 {
   "name": "invoice",
   "version": "1.0.0",
-  "description": "Connect Claude Code to your Peppol portal at invoice.vanami.com (Vanami): send e-invoices, follow up what customers owe with reminders, and pay suppliers with a payment file for the bank.",
+  "description": "Connect Claude Code to Vanami Procure at invoice.vanami.com: send e-invoices, follow up what customers owe with reminders, and pay suppliers with a payment file for the bank.",
   "author": { "name": "Vanami", "url": "https://vanami.com" },
   "homepage": "https://invoice.vanami.com",
   "keywords": ["peppol", "e-invoice", "invoicing", "accounts-receivable", "payments", "iso20022", "mcp"],
