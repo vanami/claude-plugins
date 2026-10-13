@@ -74,8 +74,11 @@ Ask in one message, with a proposal for each, and wait for the answers:
    ```
    The kit's SDKs come from npm (`@vanami/accounts`, `@vanami/accounts-react`), and the
    template's `.github/dependabot.yml` proposes their updates; keep both.
-2. Fill in `kit/product.yaml` from the brief (`references/manifest.md`), and mirror the plans
-   and roles in `lib/product.ts`. Set the title in `app/layout.tsx` and the texts.
+2. Fill in `kit/product.yaml` from the brief (`references/manifest.md`), with the names of
+   plans, roles and entitlements (`name`, `labels:`). Put the permission and entitlement keys
+   the code checks in `lib/product.ts`; nothing else there: the app reads plans, prices and
+   role names from the kit's catalogue (`lib/catalogue.ts`, doc 07 D-450). Set the title in
+   `app/layout.tsx` and the texts.
 3. Leave the example feature (`item`) for now. It proves the plan and permission checks
    until the service's own feature replaces it in step 9.
 4. Check: `npm run typecheck && npm test`.
